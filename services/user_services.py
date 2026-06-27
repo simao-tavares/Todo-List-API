@@ -15,6 +15,17 @@ class UserServices:
             db.session.rollback()
             return
 
+    def find_user_by_id(self, id: int):
+            try:
+                search = db.session.query(User).filter(User.id == id).first()
+                if search is None:
+                    return False
+                else:
+                    return True
+            except (InvalidRequestError, OperationalError, TimeoutError):
+                db.session.rollback()
+                return
+
     def add_user(self, name: str, email: str, password: str) -> int | None:
         try:
             user = User(name = name, email = email, password = password)
