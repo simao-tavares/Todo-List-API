@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Todo",
+  "properties": {
+    "title": {
+      "minLength": 1
+    },
+    "description": {
+    }
+  },
+  "required": ["title"]
+}
