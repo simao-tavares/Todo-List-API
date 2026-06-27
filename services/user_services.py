@@ -28,4 +28,15 @@ class UserServices:
     def password_to_hash(self, password: str) -> str:
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         return hashed_password
+
+    def compare_passwords(self, hashed_password: str, password: str) -> bool:
+        return bcrypt.check_password_hash(hashed_password, password)
+
+    def get_id_and_password(self, email: str):
+        try:
+            search = db.session.query(User).filter(User.email == email).first()
+            return search.id, search.password
+        except (InvalidRequestError, OperationalError, TimeoutError):
+            db.session.rollback()
+            return
         
