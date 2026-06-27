@@ -57,6 +57,25 @@ def validate_json(json_data: dict, type_of_operation: str):
                         'message': 'Invalid email address'
                     }
 
+    if type_of_operation == 'Todo':
+        with open('schemas/todos.json', 'r') as schema_file:
+            todo_schema = json.load(schema_file)
+
+        try:
+            validate(instance = json_data, schema = todo_schema, format_checker = FormatChecker())
+        except ValidationError as e:
+            match e.validator:
+                case 'required':
+                    return {
+                        'message': f'Missing {e.message.split("'")[1]} field'
+                    }
+                case 'minLength':
+                    return {
+                        'message': 'Invalid title field'
+                    }
+
+            
+
 
 def validate_password(password: str) -> bool:
     result = Analyzer(password)
