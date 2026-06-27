@@ -4,7 +4,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "pattern": "^[a-zA-Z0-9-_\\s]+$"
+      "pattern": "^[a-zA-Z0-9À-ÿ-_\\s]+$"
     },
     "email": {
       "type": "string",
