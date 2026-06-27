@@ -40,6 +40,23 @@ def validate_json(json_data: dict, type_of_operation: str):
                         'message': 'Weak password. Password must be more than 12 characters long and include uppercase, lowercase, numbers, and special characters'
                     }
 
+    if type_of_operation == 'Login':
+        with open('schemas/auth/login.json', 'r') as schema_file:
+            login_schema = json.load(schema_file)
+
+        try:
+            validate(instance = json_data, schema = login_schema, format_checker = FormatChecker())
+        except ValidationError as e:
+            match e.validator:
+                case 'required':
+                    return {
+                        'message': f'Missing {e.message.split("'")[1]} field'
+                    }
+                case 'format':
+                    return {
+                        'message': 'Invalid email address'
+                    }
+
 
 def validate_password(password: str) -> bool:
     result = Analyzer(password)
