@@ -58,6 +58,28 @@ class TodoServices:
         except (InvalidRequestError, OperationalError, TimeoutError):
             db.session.rollback()
             return
+
+    def get_todos(self, page: int, limit: int, user_id: int):
+        offset = (page - 1) * limit
+        data = []
+        try:
+            todos = db.session.query(Todo).filter(Todo.user_id == user_id).offset(offset).limit(limit).all()
+            for todo in todos:
+                task_json = {
+                    'id': todo.id,
+                    'title': todo.title,
+                    'description': todo.description
+                }
+                data.append(task_json)
+            return {
+                'data': data,
+                'page': page,
+                'limit': limit,
+                'total': db.session.query(Todo).filter(Todo.user_id == user_id).count()
+            }
+        except (InvalidRequestError, OperationalError, TimeoutError):
+            db.session.rollback()
+            return
             
 
 
