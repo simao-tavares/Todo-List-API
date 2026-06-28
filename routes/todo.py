@@ -49,7 +49,44 @@ def create_or_get():
 
         return jsonify({'id': todo_id, 'title': title, 'description': description}), 200
 
+    if request.method == 'GET':
+        page = request.args.get('page', type = int)
+        limit = request.args.get('limit', type = int)
 
+        print(page)
+        print(limit)
+
+        if page is None or limit is None:
+            return jsonify({'message': 'Invalid page or limit'}), 400
+
+        header = request.headers.get('Authorization')
+
+        if header is None:
+            return jsonify({'message': 'Unauthorized'}), 401
+
+        user_id = validate_token(header.split(' ')[1])
+
+        if user_id is None or not user_id:
+            return jsonify({'message': 'Unauthorized'}), 401
+
+        user_services = UserServices()
+
+        user_exists = user_services.find_user_by_id(user_id)
+
+        if not user_exists:
+            return jsonify({'message': 'Unauthorized'}), 401
+
+        if user_exists is None:
+            return jsonify({'message': 'Internal server error'}), 500
+
+        todo_services = TodoServices()
+
+
+        todos_data = todo_services.get_todos(page, limit, user_id)
+
+        return jsonify(todos_data), 200
+
+      
 @todo.route('/<int:id>', methods = ['PUT', 'DELETE'])
 def update_or_delete(id):
     if request.method == 'PUT':
