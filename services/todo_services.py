@@ -49,6 +49,17 @@ class TodoServices:
             db.session.rollback()
             return   
 
+    def delete_todo(self, id: int):
+        try:
+            search = db.session.query(Todo).filter(Todo.id == id).first()
+            db.session.delete(search)
+            db.session.commit()
+            return True
+        except (InvalidRequestError, OperationalError, TimeoutError):
+            db.session.rollback()
+            return
+            
+
 
 
         
