@@ -20,6 +20,10 @@ jwt.init_app(app)
 app.register_blueprint(auth)
 app.register_blueprint(todo)
 
+@app.errorhandler(404)
+def handle_404(e):
+    return jsonify({'message': 'The requested URL was not found on the server'}), 404
+
 @app.errorhandler(405)
 def handle_405(e):
     return jsonify({'message': 'Method not allowed for this endpoint'}), 405
