@@ -22,4 +22,4 @@ class Todo(db.Model):
     user_id = db.Column(db.ForeignKey('User.id'))
 
     def __repr__(self) -> str:
-        return f'User (Id: {self.id} | Title: {self.title} | Description: {self.description} | User_id: {self.user_id}'
+        return f'User (Id: {self.id} | Title: {self.title} | Description: {self.description} | User_id: {self.user_id})'
