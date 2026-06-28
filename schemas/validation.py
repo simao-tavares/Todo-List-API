@@ -74,8 +74,6 @@ def validate_json(json_data: dict, type_of_operation: str):
                         'message': 'Invalid title field'
                     }
 
-            
-
 
 def validate_password(password: str) -> bool:
     result = Analyzer(password)
